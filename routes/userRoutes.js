@@ -4,6 +4,9 @@ const routes=express.Router();
 const fs=require("fs");
 
 routes.get("/login",(req,res)=>{
+    if(req.session.username)
+        res.redirect("/auth/dashboard");
+    
     res.sendFile(path.join(__dirname,"../login.html"));
 })
 routes.get("/signup",(req,res)=>{
@@ -21,8 +24,11 @@ routes.post("/login",(req,res)=>{
         if(results.length==0)
             res.redirect("/Login.html");
         else
-            res.redirect("/auth/dashboard");
+        {
+            req.session.username=req.body.username;
 
+            res.redirect("/auth/dashboard");
+        }
 
      });
 
